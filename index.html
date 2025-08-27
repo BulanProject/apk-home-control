@@ -3,238 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Home Control System</title>
+    <title>Smart Home Control System - Revisi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            min-height: 100vh;
-            color: #e2e8f0;
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-        }
-        
-        .device-card {
-            transition: all 0.3s ease;
-            transform: translateY(0);
-        }
-        
-        .device-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-        
-        .status-on {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        }
-        
-        .status-off {
-            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .voice-wave {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            height: 40px;
-        }
-        
-        .wave-bar {
-            width: 4px;
-            height: 20px;
-            background: #4299e1;
-            border-radius: 2px;
-            animation: wave 1.5s ease-in-out infinite;
-        }
-        
-        .wave-bar:nth-child(2) { animation-delay: 0.2s; }
-        .wave-bar:nth-child(3) { animation-delay: 0.4s; }
-        .wave-bar:nth-child(4) { animation-delay: 0.6s; }
-        .wave-bar:nth-child(5) { animation-delay: 0.8s; }
-        
-        @keyframes wave {
-            0%, 100% { height: 20px; }
-            50% { height: 40px; }
-        }
-        
-        .code-output {
-            font-family: 'Courier New', monospace;
-            background: #2d3748;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
-        
-        .typing-effect::after {
-            content: "|";
-            animation: blink 1s step-end infinite;
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
+        * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+        body {background:linear-gradient(135deg,#1a202c 0%,#2d3748 100%);min-height:100vh;color:#e2e8f0;}
+        .glass-effect{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;}
+        .code-output{font-family:'Courier New',monospace;background:#2d3748;border-radius:8px;overflow-x:auto;}
+        .typing-effect::after{content:"|";animation:blink 1s step-end infinite;}
+        @keyframes blink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
     </style>
 </head>
 <body class="min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
-        <!-- Header -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-white mb-4">🏠 Smart Home Control System</h1>
-            <p class="text-xl text-gray-300">Kontrol rumah Anda dengan suara yang nyaman</p>
-        </header>
-
-        <!-- Voice Command Section -->
-        <div class="glass-effect p-8 mb-8">
-            <div class="text-center">
-                <h2 class="text-2xl font-semibold mb-6">🎤 Voice Command</h2>
-                
-                <div class="mb-6">
-                    <button id="startListening" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                        Mulai Mendengarkan
-                    </button>
-                    <div id="listeningStatus" class="mt-4 hidden">
-                        <div class="voice-wave">
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                            <div class="wave-bar"></div>
-                        </div>
-                        <p class="text-green-400 mt-2">Mendengarkan...</p>
-                    </div>
-                </div>
-
-                <div class="bg-gray-800 rounded-lg p-4 mb-6">
-                    <h3 class="text-lg font-semibold mb-2">💡 Contoh Perintah:</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                        <span class="bg-gray-700 px-3 py-1 rounded">"Nyalakan lampu dapur"</span>
-                        <span class="bg-gray-700 px-3 py-1 rounded">"Matikan TV ruang tamu"</span>
-                        <span class="bg-gray-700 px-3 py-1 rounded">"Atur suhu AC menjadi 24 derajat"</span>
-                        <span class="bg-gray-700 px-3 py-1 rounded">"Buka tirai jendela"</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- System Response -->
-        <div class="glass-effect p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-4">🤖 Respons Sistem</h3>
-            <div id="systemResponse" class="bg-gray-800 rounded-lg p-4 min-h-20">
-                <p class="text-gray-400">Menunggu perintah...</p>
-            </div>
-        </div>
-
-        <!-- Code Output -->
-        <div class="glass-effect p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-4">💻 Kode Program</h3>
-            <div class="code-output p-4 rounded-lg">
-                <pre id="codeOutput" class="text-green-400 text-sm">// Kode akan muncul di sini setelah perintah</pre>
-            </div>
-        </div>
-
-        <!-- Device Status Dashboard -->
-        <!-- ... truncated for brevity (the rest of HTML remains unchanged) -->
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+<header class="text-center mb-12">
+    <h1 class="text-4xl font-bold text-white mb-4">🏠 Smart Home Control System</h1>
+    <p class="text-xl text-gray-300">Kontrol rumah Anda dengan suara</p>
+</header>
+<div class="glass-effect p-8 mb-8 text-center">
+    <h2 class="text-2xl font-semibold mb-6">🎤 Voice Command</h2>
+    <button id="startListening" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+        Mulai Mendengarkan
+    </button>
+    <div id="listeningStatus" class="mt-4 hidden">
+        <p class="text-green-400">Mendengarkan...</p>
     </div>
+</div>
+<div class="glass-effect p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-4">🤖 Respons Sistem</h3>
+    <div id="systemResponse" class="bg-gray-800 rounded-lg p-4 min-h-20">
+        <p class="text-gray-400">Menunggu perintah...</p>
+    </div>
+</div>
+<div class="glass-effect p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-4">💻 Kode Program</h3>
+    <div class="code-output p-4 rounded-lg">
+        <pre id="codeOutput" class="text-green-400 text-sm">// Kode akan muncul di sini setelah perintah</pre>
+    </div>
+</div>
 
-    <script>
-    // Revisions in the JS part
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition;
-    if (SpeechRecognition) {
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = 'id-ID';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
+<!-- Fitur Tambahan -->
+<div class="glass-effect p-6 mt-8">
+    <h3 class="text-xl font-semibold mb-4">🆕 Fitur Tambahan</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Jadwal Otomatisasi -->
+        <div class="glass-effect p-4 rounded-xl text-center">
+            <span class="text-3xl mb-2 block">⏰</span>
+            <h4 class="font-semibold mb-2">Jadwal Otomatisasi</h4>
+            <p class="text-gray-400 text-sm">Atur jadwal perangkat menyala/mati otomatis.</p>
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Atur Jadwal</button>
+        </div>
+        <!-- Mode Hemat Energi -->
+        <div class="glass-effect p-4 rounded-xl text-center">
+            <span class="text-3xl mb-2 block">🔋</span>
+            <h4 class="font-semibold mb-2">Mode Hemat Energi</h4>
+            <p class="text-gray-400 text-sm">Aktifkan mode hemat daya di seluruh rumah.</p>
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Aktifkan</button>
+        </div>
+        <!-- Keamanan Rumah -->
+        <div class="glass-effect p-4 rounded-xl text-center">
+            <span class="text-3xl mb-2 block">🔒</span>
+            <h4 class="font-semibold mb-2">Keamanan Rumah</h4>
+            <p class="text-gray-400 text-sm">Pantau alarm & kamera keamanan.</p>
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Lihat Status</button>
+        </div>
+        <!-- Statistik Penggunaan -->
+        <div class="glass-effect p-4 rounded-xl text-center">
+            <span class="text-3xl mb-2 block">📊</span>
+            <h4 class="font-semibold mb-2">Statistik Penggunaan</h4>
+            <p class="text-gray-400 text-sm">Lihat statistik penggunaan listrik harian.</p>
+            <button class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Lihat Statistik</button>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'id-ID';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+}
+const startBtn=document.getElementById('startListening');
+const listeningStatus=document.getElementById('listeningStatus');
+const systemResponse=document.getElementById('systemResponse');
+const codeOutput=document.getElementById('codeOutput');
+
+if(recognition){
+    startBtn.addEventListener('click',()=>{
+        try{recognition.start();}catch(e){console.error('Recognition start error:',e);}
+    });
+    recognition.onstart=()=>{
+        listeningStatus.classList.remove('hidden');
+        startBtn.disabled=true;
+        systemResponse.innerHTML='<p class="text-yellow-400">Mendengarkan perintah...</p>';
+    };
+    recognition.onresult=(e)=>{
+        const transcript=e.results[0][0].transcript.toLowerCase();
+        console.log('Transcript:',transcript); // debug log
+        processCommand(transcript);
+    };
+    recognition.onend=()=>{listeningStatus.classList.add('hidden');startBtn.disabled=false;};
+    recognition.onerror=(e)=>{systemResponse.innerHTML='<p class="text-red-400">Error: '+e.error+'</p>';};
+}else{
+    startBtn.disabled=true;
+    startBtn.textContent='Voice recognition tidak didukung';
+    systemResponse.innerHTML='<p class="text-red-400">Browser tidak mendukung voice recognition</p>';
+}
+
+function typeWriter(text,i){
+    if(i<text.length){
+        codeOutput.innerHTML=text.substring(0,i+1)+'<span class="typing-effect"></span>';
+        setTimeout(()=>typeWriter(text,i+1),10);
+    }else{codeOutput.innerHTML=text;}
+}
+
+function processCommand(command){
+    let response=''; let code='';
+    // Simple keyword checks
+    if(command.includes('nyala')&&command.includes('lampu')&&command.includes('dapur')){
+        response='Lampu dapur dinyalakan.';
+        code='// Kode: nyalakan lampu dapur\ndigitalWrite(lampuDapurPin, HIGH);';
+    }else if(command.includes('mati')&&command.includes('lampu')&&command.includes('dapur')){
+        response='Lampu dapur dimatikan.';
+        code='// Kode: matikan lampu dapur\ndigitalWrite(lampuDapurPin, LOW);';
+    }else{
+        response='Perintah tidak dikenali: '+command;
+        code='// Perintah tidak dikenali\n// Silakan coba lagi';
     }
-
-    const startBtn = document.getElementById('startListening');
-    const listeningStatus = document.getElementById('listeningStatus');
-    const systemResponse = document.getElementById('systemResponse');
-    const codeOutput = document.getElementById('codeOutput');
-
-    if (recognition) {
-        startBtn.addEventListener('click', () => {
-            try {
-                recognition.start(); // Start listening directly
-            } catch (error) {
-                console.error('Recognition start error:', error);
-            }
-        });
-
-        recognition.onstart = () => {
-            listeningStatus.classList.remove('hidden');
-            startBtn.disabled = true;
-            systemResponse.innerHTML = '<p class="text-yellow-400">Mendengarkan perintah...</p>';
-        };
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript.toLowerCase();
-            systemResponse.innerHTML = `<p class="text-yellow-400">Perintah: ${transcript}</p>`;
-            processCommand(transcript);
-        };
-
-        recognition.onend = () => {
-            listeningStatus.classList.add('hidden');
-            startBtn.disabled = false;
-        };
-
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            systemResponse.innerHTML = '<p class="text-red-400">Error: ' + event.error + '</p>';
-            listeningStatus.classList.add('hidden');
-            startBtn.disabled = false;
-        };
-    } else {
-        startBtn.disabled = true;
-        startBtn.textContent = 'Voice recognition tidak didukung';
-        systemResponse.innerHTML = '<p class="text-red-400">Browser tidak mendukung voice recognition</p>';
-    }
-
-    function typeWriter(text, i) {
-        if (i < text.length) {
-            codeOutput.innerHTML = text.substring(0, i+1) + '<span class="typing-effect"></span>';
-            setTimeout(() => typeWriter(text, i+1), 10);
-        } else {
-            codeOutput.innerHTML = text;
-        }
-    }
-
-    function processCommand(command) {
-        let response = '';
-        let code = '';
-
-        // (Command processing logic remains same as original file)
-
-        systemResponse.innerHTML = `<p class="text-green-400">${response}</p>`;
-        codeOutput.innerHTML = '';
-        setTimeout(() => typeWriter(code, 0), 800);
-    }
-    </script>
+    systemResponse.innerHTML='<p class="text-green-400">'+response+'</p>';
+    codeOutput.innerHTML='';
+    typeWriter(code,0);
+}
+</script>
 </body>
 </html>

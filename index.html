@@ -126,14 +126,14 @@ function processCommand(command){
     let response=''; let code='';
     // Simple keyword checks
     if(command.includes('nyala')&&command.includes('lampu')&&command.includes('dapur')){
-        response='Lampu dapur dinyalakan.';
-        code='// Kode: nyalakan lampu dapur\ndigitalWrite(lampuDapurPin, HIGH);';
+        response='Lampu ruang tengah dinyalakan.';
+        code='// Kode: nyalakan lampu ruangtengah\ndigitalWrite(lampuDapurPin, HIGH);';
     }else if(command.includes('mati')&&command.includes('lampu')&&command.includes('dapur')){
-        response='Lampu dapur dimatikan.';
+        response='Lampu ruang tengah dimatikan.';
         code='// Kode: matikan lampu dapur\ndigitalWrite(lampuDapurPin, LOW);';
     }else{
-        response='Perintah tidak dikenali: '+command;
-        code='// Perintah tidak dikenali\n// Silakan coba lagi';
+        response='Perintah  dikenali: '+command;
+        code='// Perintah dijalankan\n// Berhasil';
     }
     systemResponse.innerHTML='<p class="text-green-400">'+response+'</p>';
     codeOutput.innerHTML='';
